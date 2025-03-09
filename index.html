@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Magic: What Happens When You Click?</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/lua.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>What Really Happens When You Click?</h1>
+        
+        <div class="main-container">
+            <!-- Left Panel - Code Display -->
+            <div class="code-panel">
+                <h2>The Secret Code</h2>
+                <div class="code-container">
+                    <pre><code class="language-lua" id="code-display">local part = script.Parent  
+-- parent contains the script 
+
+local clickDetector = Instance.new("ClickDetector", part)
+
+
+local function growPart()
+    part.Size = part.Size + Vector3.new(1, 1, 1)  -- Increase size
+end
+
+clickDetector.MouseClick:Connect(growPart)</code></pre>
+                </div>
+                <div class="code-explanation" id="code-explanation">
+                    <div class="click-magic hidden">
+                        <h3>Click Magic!</h3>
+                        <p id="step-description">When you click the part, the code jumps straight to the growPart function!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Visualization -->
+            <div class="game-panel">
+                <h2>See What Happens!</h2>
+                
+                <div class="game-scene" id="game-scene">
+                    <div class="player-character">
+                        <div class="character-head"></div>
+                        <div class="character-body"></div>
+                        <div class="character-arm" id="character-arm"></div>
+                    </div>
+                    
+                    <div class="game-part-container">
+                        <div id="game-part" class="game-part">
+                            <span>Click Me!</span>
+                        </div>
+                    </div>
+                    
+                    <div class="code-brain">
+                        <div class="brain-title">Code Brain</div>
+                        <div class="brain-part detector">ClickDetector</div>
+                        <div class="brain-connection" id="brain-connection"></div>
+                        <div class="brain-part function">growPart Function</div>
+                    </div>
+
+                    <div class="step-indicator hidden" id="step-indicator">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Step 1: Setup Complete</div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button id="next-button" class="pulse">Next Step</button>
+                    <button id="reset-button">Start Over</button>
+                </div>
+                
+                <div class="message-box" id="message-box">
+                    <p>Click on the blue part to begin!</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step-by-step">
+            <h2>What Really Happens When You Click?</h2>
+            <div class="steps">
+                <div class="step" id="overview-step-1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>At Game Start</h3>
+                        <p>The game runs the setup code (lines 1-10). This creates the ClickDetector and connects it to the growPart function.</p>
+                    </div>
+                </div>
+                <div class="step" id="overview-step-2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>You Click the Part!</h3>
+                        <p>The ClickDetector feels your click and gets excited!</p>
+                    </div>
+                </div>
+                <div class="step" id="overview-step-3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>The ClickDetector Activates</h3>
+                        <p>It remembers the function it was connected to (the growPart function).</p>
+                    </div>
+                </div>
+                <div class="step" id="overview-step-4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Jump to The Function!</h3>
+                        <p>The code jumps directly to lines 6-8, the growPart function. It doesn't restart from the beginning!</p>
+                    </div>
+                </div>
+                <div class="step" id="overview-step-5">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>The Part Grows</h3>
+                        <p>The line "part.Size = part.Size + Vector3.new(1, 1, 1)" makes the part bigger!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="fun-facts">
+            <h2>Fun Facts About Roblox Code</h2>
+            <ul>
+                <li>The setup code only runs once when the game starts!</li>
+                <li>When you click, the code jumps straight to the function!</li>
+                <li>The ClickDetector is like a doorbell - when you press it, it calls the function!</li>
+                <li>You can click again and again - the part will keep growing!</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

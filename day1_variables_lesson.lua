@@ -217,26 +217,247 @@ local function createDiscoveryEnvironment()
 end
 
 -- =============================================
--- STORY INTRODUCTION
+-- INTERACTIVE DIALOG SYSTEM
+-- =============================================
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
+-- Create dialog GUI for each player
+local function createDialogGUI(player)
+    local playerGui = player:WaitForChild("PlayerGui")
+    
+    -- Main dialog frame
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "DetectiveDialog"
+    screenGui.ResetOnSpawn = false
+    screenGui.Parent = playerGui
+    
+    local dialogFrame = Instance.new("Frame")
+    dialogFrame.Name = "DialogFrame"
+    dialogFrame.Size = UDim2.new(0.6, 0, 0.4, 0)
+    dialogFrame.Position = UDim2.new(0.2, 0, 0.3, 0)
+    dialogFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    dialogFrame.BorderSizePixel = 0
+    dialogFrame.Visible = false
+    dialogFrame.Parent = screenGui
+    
+    -- Add rounded corners
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 12)
+    corner.Parent = dialogFrame
+    
+    -- Character portrait
+    local portrait = Instance.new("ImageLabel")
+    portrait.Name = "Portrait"
+    portrait.Size = UDim2.new(0.2, 0, 0.6, 0)
+    portrait.Position = UDim2.new(0.05, 0, 0.1, 0)
+    portrait.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    portrait.BorderSizePixel = 0
+    portrait.Image = "rbxassetid://0" -- Default empty image
+    portrait.Parent = dialogFrame
+    
+    local portraitCorner = Instance.new("UICorner")
+    portraitCorner.CornerRadius = UDim.new(0, 8)
+    portraitCorner.Parent = portrait
+    
+    -- Character name label
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.Name = "CharacterName"
+    nameLabel.Size = UDim2.new(0.65, 0, 0.15, 0)
+    nameLabel.Position = UDim2.new(0.3, 0, 0.05, 0)
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.Text = "Detective Martinez"
+    nameLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
+    nameLabel.TextScaled = true
+    nameLabel.Font = Enum.Font.SourceSansBold
+    nameLabel.Parent = dialogFrame
+    
+    -- Dialog text
+    local dialogText = Instance.new("TextLabel")
+    dialogText.Name = "DialogText"
+    dialogText.Size = UDim2.new(0.65, 0, 0.5, 0)
+    dialogText.Position = UDim2.new(0.3, 0, 0.2, 0)
+    dialogText.BackgroundTransparency = 1
+    dialogText.Text = ""
+    dialogText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    dialogText.TextScaled = true
+    dialogText.Font = Enum.Font.SourceSans
+    dialogText.TextWrapped = true
+    dialogText.TextXAlignment = Enum.TextXAlignment.Left
+    dialogText.TextYAlignment = Enum.TextYAlignment.Top
+    dialogText.Parent = dialogFrame
+    
+    -- OK Button
+    local okButton = Instance.new("TextButton")
+    okButton.Name = "OKButton"
+    okButton.Size = UDim2.new(0.2, 0, 0.15, 0)
+    okButton.Position = UDim2.new(0.75, 0, 0.8, 0)
+    okButton.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
+    okButton.BorderSizePixel = 0
+    okButton.Text = "OK"
+    okButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    okButton.TextScaled = true
+    okButton.Font = Enum.Font.SourceSansBold
+    okButton.Parent = dialogFrame
+    
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0, 6)
+    buttonCorner.Parent = okButton
+    
+    -- Task indicator
+    local taskFrame = Instance.new("Frame")
+    taskFrame.Name = "TaskFrame"
+    taskFrame.Size = UDim2.new(0.9, 0, 0.15, 0)
+    taskFrame.Position = UDim2.new(0.05, 0, 0.75, 0)
+    taskFrame.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+    taskFrame.BorderSizePixel = 0
+    taskFrame.Visible = false
+    taskFrame.Parent = dialogFrame
+    
+    local taskCorner = Instance.new("UICorner")
+    taskCorner.CornerRadius = UDim.new(0, 6)
+    taskCorner.Parent = taskFrame
+    
+    local taskText = Instance.new("TextLabel")
+    taskText.Name = "TaskText"
+    taskText.Size = UDim2.new(1, 0, 1, 0)
+    taskText.BackgroundTransparency = 1
+    taskText.Text = "🎯 TASK: Complete the challenge to continue!"
+    taskText.TextColor3 = Color3.fromRGB(0, 0, 0)
+    taskText.TextScaled = true
+    taskText.Font = Enum.Font.SourceSansBold
+    taskText.Parent = taskFrame
+    
+    return screenGui
+end
+
+-- Show dialog to all players
+local function showDialog(characterName, message, hasTask, taskDescription)
+    for _, player in pairs(Players:GetPlayers()) do
+        local playerGui = player:WaitForChild("PlayerGui")
+        local dialogGui = playerGui:FindFirstChild("DetectiveDialog")
+        
+        if not dialogGui then
+            dialogGui = createDialogGUI(player)
+        end
+        
+        local dialogFrame = dialogGui.DialogFrame
+        local nameLabel = dialogFrame.CharacterName
+        local dialogText = dialogFrame.DialogText
+        local taskFrame = dialogFrame.TaskFrame
+        local taskText = taskFrame.TaskText
+        
+        -- Update dialog content
+        nameLabel.Text = characterName
+        dialogText.Text = message
+        
+        -- Show/hide task indicator
+        if hasTask then
+            taskFrame.Visible = true
+            taskText.Text = "🎯 TASK: " .. taskDescription
+        else
+            taskFrame.Visible = false
+        end
+        
+        -- Show dialog
+        dialogFrame.Visible = true
+    end
+end
+
+-- Hide dialog for all players
+local function hideDialog()
+    for _, player in pairs(Players:GetPlayers()) do
+        local playerGui = player:WaitForChild("PlayerGui")
+        local dialogGui = playerGui:FindFirstChild("DetectiveDialog")
+        
+        if dialogGui then
+            dialogGui.DialogFrame.Visible = false
+        end
+    end
+end
+
+-- Wait for any player to click OK
+local function waitForOKClick()
+    local clicked = false
+    local connections = {}
+    
+    for _, player in pairs(Players:GetPlayers()) do
+        local playerGui = player:WaitForChild("PlayerGui")
+        local dialogGui = playerGui:FindFirstChild("DetectiveDialog")
+        
+        if dialogGui then
+            local okButton = dialogGui.DialogFrame.OKButton
+            local connection = okButton.MouseButton1Click:Connect(function()
+                clicked = true
+            end)
+            table.insert(connections, connection)
+        end
+    end
+    
+    -- Wait for click
+    while not clicked do
+        wait(0.1)
+    end
+    
+    -- Disconnect all connections
+    for _, connection in pairs(connections) do
+        connection:Disconnect()
+    end
+    
+    hideDialog()
+    wait(0.5) -- Brief pause between dialogs
+end
+
+-- =============================================
+-- STORY INTRODUCTION WITH INTERACTIVE DIALOGS
 -- =============================================
 
 local function startDay1Story()
-    print("🕵️ DAY 1: THE EVIDENCE LOCKER")
-    print("=" .. string.rep("=", 40))
-    print()
-    print("Detective Chief Martinez: 'Welcome to your first day at the")
-    print("Digital Detective Academy! I'm Chief Martinez.'")
-    print()
-    print("'Someone has broken into our main computer system and")
-    print("stolen the code to our evidence vault. We need your help!'")
-    print()
-    print("'But first, every good detective needs to learn how to")
-    print("organize information. That's where VARIABLES come in!'")
-    print()
-    print("Officer Binary: 'Beep boop! Variables are like labeled")
-    print("boxes where we store important information!'")
-    print()
-    wait(3)
+    -- Dialog 1: Welcome
+    showDialog(
+        "Detective Chief Martinez",
+        "Welcome to your first day at the Digital Detective Academy! I'm Chief Martinez.\n\nWe have an urgent situation that requires your help.",
+        false,
+        ""
+    )
+    waitForOKClick()
+    
+    -- Dialog 2: The Problem
+    showDialog(
+        "Detective Chief Martinez",
+        "Someone has broken into our main computer system and stolen the code to our evidence vault!\n\nWe need junior detectives like you to help solve this case.",
+        false,
+        ""
+    )
+    waitForOKClick()
+    
+    -- Dialog 3: Learning Variables
+    showDialog(
+        "Detective Chief Martinez",
+        "But first, every good detective needs to learn how to organize information properly.\n\nThat's where VARIABLES come in!",
+        false,
+        ""
+    )
+    waitForOKClick()
+    
+    -- Dialog 4: Officer Binary Introduction
+    showDialog(
+        "Officer Binary",
+        "Beep boop! Variables are like labeled boxes where we store important information!\n\nThey're the foundation of all detective work... I mean, programming!",
+        false,
+        ""
+    )
+    waitForOKClick()
+    
+    -- Dialog 5: First Task
+    showDialog(
+        "Detective Chief Martinez",
+        "Let's start with your first assignment. We need to create your detective profile using variables.\n\nAre you ready to begin?",
+        true,
+        "Create your detective profile using variables"
+    )
+    waitForOKClick()
 end
 
 -- =============================================

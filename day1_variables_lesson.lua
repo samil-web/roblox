@@ -477,8 +477,8 @@ local function createTaskGUI(player, taskTitle, instructions, exampleCode, targe
     -- Main task frame
     local taskFrame = Instance.new("Frame")
     taskFrame.Name = "TaskFrame"
-    taskFrame.Size = UDim2.new(0.8, 0, 0.8, 0)
-    taskFrame.Position = UDim2.new(0.1, 0, 0.1, 0)
+    taskFrame.Size = UDim2.new(0.6, 0, 0.4, 0)
+    taskFrame.Position = UDim2.new(0.2, 0, 0.3, 0)
     taskFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     taskFrame.BorderSizePixel = 0
     taskFrame.Parent = taskGui
@@ -508,7 +508,7 @@ local function createTaskGUI(player, taskTitle, instructions, exampleCode, targe
     instructionsLabel.Size = UDim2.new(0.95, 0, 0.15, 0)
     instructionsLabel.Position = UDim2.new(0.025, 0, 0.12, 0)
     instructionsLabel.BackgroundTransparency = 1
-    instructionsLabel.Text = instructions
+    instructionsLabel.Text = "Practice writing variables for your detective character. Try creating: detectiveName, badgeNumber, specialization, and isActive. Click OK when you're done practicing!"
     instructionsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     instructionsLabel.TextScaled = true
     instructionsLabel.Font = Enum.Font.SourceSans
@@ -516,152 +516,53 @@ local function createTaskGUI(player, taskTitle, instructions, exampleCode, targe
     instructionsLabel.TextXAlignment = Enum.TextXAlignment.Left
     instructionsLabel.Parent = taskFrame
     
-    -- Example code section
-    local exampleFrame = Instance.new("Frame")
-    exampleFrame.Size = UDim2.new(0.45, 0, 0.5, 0)
-    exampleFrame.Position = UDim2.new(0.025, 0, 0.28, 0)
-    exampleFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    exampleFrame.BorderSizePixel = 0
-    exampleFrame.Parent = taskFrame
     
-    local exampleCorner = Instance.new("UICorner")
-    exampleCorner.CornerRadius = UDim.new(0, 10)
-    exampleCorner.Parent = exampleFrame
-    
-    local exampleTitle = Instance.new("TextLabel")
-    exampleTitle.Size = UDim2.new(1, 0, 0.1, 0)
-    exampleTitle.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
-    exampleTitle.BorderSizePixel = 0
-    exampleTitle.Text = "📖 EXAMPLE CODE"
-    exampleTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-    exampleTitle.TextScaled = true
-    exampleTitle.Font = Enum.Font.SourceSansBold
-    exampleTitle.Parent = exampleFrame
-    
-    local exampleTitleCorner = Instance.new("UICorner")
-    exampleTitleCorner.CornerRadius = UDim.new(0, 10)
-    exampleTitleCorner.Parent = exampleTitle
-    
-    local exampleCode = Instance.new("TextLabel")
-    exampleCode.Size = UDim2.new(0.95, 0, 0.85, 0)
-    exampleCode.Position = UDim2.new(0.025, 0, 0.12, 0)
-    exampleCode.BackgroundTransparency = 1
-    exampleCode.Text = exampleCode
-
-    exampleCode.TextColor3 = Color3.fromRGB(0, 255, 0)
-    exampleCode.TextScaled = true
-    exampleCode.Font = Enum.Font.Code
-    exampleCode.TextWrapped = true
-    exampleCode.TextXAlignment = Enum.TextXAlignment.Left
-    exampleCode.TextYAlignment = Enum.TextYAlignment.Top
-    exampleCode.Parent = exampleFrame
-    
-    -- Student work area
-    local workFrame = Instance.new("Frame")
-    workFrame.Size = UDim2.new(0.45, 0, 0.5, 0)
-    workFrame.Position = UDim2.new(0.525, 0, 0.28, 0)
-    workFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    workFrame.BorderSizePixel = 0
-    workFrame.Parent = taskFrame
-    
-    local workCorner = Instance.new("UICorner")
-    workCorner.CornerRadius = UDim.new(0, 10)
-    workCorner.Parent = workFrame
-    
-    local workTitle = Instance.new("TextLabel")
-    workTitle.Size = UDim2.new(1, 0, 0.1, 0)
-    workTitle.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-    workTitle.BorderSizePixel = 0
-    workTitle.Text = "✏️ YOUR CODE"
-    workTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-    workTitle.TextScaled = true
-    workTitle.Font = Enum.Font.SourceSansBold
-    workTitle.Parent = workFrame
-    
-    local workTitleCorner = Instance.new("UICorner")
-    workTitleCorner.CornerRadius = UDim.new(0, 10)
-    workTitleCorner.Parent = workTitle
-    
+    -- Practice text box
     local codeInput = Instance.new("TextBox")
     codeInput.Name = "CodeInput"
-    codeInput.Size = UDim2.new(0.95, 0, 0.85, 0)
-    codeInput.Position = UDim2.new(0.025, 0, 0.12, 0)
+    codeInput.Size = UDim2.new(0.95, 0, 0.5, 0)
+    codeInput.Position = UDim2.new(0.025, 0, 0.28, 0)
     codeInput.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     codeInput.BorderSizePixel = 0
-    codeInput.Text = "-- Type your variable code here!\n-- Example: local myName = \"Detective Smith\""
+    codeInput.Text = "-- Practice writing variables here!\n-- Example: local detectiveName = \"Your Name\""
     codeInput.TextColor3 = Color3.fromRGB(255, 255, 255)
     codeInput.TextScaled = false
-    codeInput.TextSize = 14
+    codeInput.TextSize = 16
     codeInput.Font = Enum.Font.Code
     codeInput.TextWrapped = true
     codeInput.TextXAlignment = Enum.TextXAlignment.Left
     codeInput.TextYAlignment = Enum.TextYAlignment.Top
     codeInput.MultiLine = true
     codeInput.ClearTextOnFocus = false
-    codeInput.Parent = workFrame
+    codeInput.Parent = taskFrame
     
     local inputCorner = Instance.new("UICorner")
     inputCorner.CornerRadius = UDim.new(0, 8)
     inputCorner.Parent = codeInput
     
-    -- Buttons
-    local buttonFrame = Instance.new("Frame")
-    buttonFrame.Size = UDim2.new(1, 0, 0.12, 0)
-    buttonFrame.Position = UDim2.new(0, 0, 0.85, 0)
-    buttonFrame.BackgroundTransparency = 1
-    buttonFrame.Parent = taskFrame
+    -- Simple OK button
+    local okButton = Instance.new("TextButton")
+    okButton.Name = "OKButton"
+    okButton.Size = UDim2.new(0.2, 0, 0.1, 0)
+    okButton.Position = UDim2.new(0.4, 0, 0.85, 0)
+    okButton.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
+    okButton.BorderSizePixel = 0
+    okButton.Text = "OK"
+    okButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    okButton.TextScaled = true
+    okButton.Font = Enum.Font.SourceSansBold
+    okButton.Parent = taskFrame
     
-    local testButton = Instance.new("TextButton")
-    testButton.Name = "TestButton"
-    testButton.Size = UDim2.new(0.2, 0, 0.8, 0)
-    testButton.Position = UDim2.new(0.3, 0, 0.1, 0)
-    testButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-    testButton.BorderSizePixel = 0
-    testButton.Text = "🧪 TEST CODE"
-    testButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-    testButton.TextScaled = true
-    testButton.Font = Enum.Font.SourceSansBold
-    testButton.Parent = buttonFrame
+    local okCorner = Instance.new("UICorner")
+    okCorner.CornerRadius = UDim.new(0, 8)
+    okCorner.Parent = okButton
     
-    local testCorner = Instance.new("UICorner")
-    testCorner.CornerRadius = UDim.new(0, 8)
-    testCorner.Parent = testButton
+    -- Simple OK button functionality
+    okButton.MouseButton1Click:Connect(function()
+        taskGui:Destroy()
+    end)
     
-    local submitButton = Instance.new("TextButton")
-    submitButton.Name = "SubmitButton"
-    submitButton.Size = UDim2.new(0.2, 0, 0.8, 0)
-    submitButton.Position = UDim2.new(0.55, 0, 0.1, 0)
-    submitButton.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
-    submitButton.BorderSizePixel = 0
-    submitButton.Text = "✅ SUBMIT"
-    submitButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-    submitButton.TextScaled = true
-    submitButton.Font = Enum.Font.SourceSansBold
-    submitButton.Parent = buttonFrame
-    
-    local submitCorner = Instance.new("UICorner")
-    submitCorner.CornerRadius = UDim.new(0, 8)
-    submitCorner.Parent = submitButton
-    
-    -- Results area
-    local resultsLabel = Instance.new("TextLabel")
-    resultsLabel.Name = "ResultsLabel"
-    resultsLabel.Size = UDim2.new(0.95, 0, 0.08, 0)
-    resultsLabel.Position = UDim2.new(0.025, 0, 0.79, 0)
-    resultsLabel.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    resultsLabel.BorderSizePixel = 0
-    resultsLabel.Text = "💡 Write your variables and click TEST CODE to see if they work!"
-    resultsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    resultsLabel.TextScaled = true
-    resultsLabel.Font = Enum.Font.SourceSans
-    resultsLabel.TextWrapped = true
-    resultsLabel.Parent = taskFrame
-    
-    local resultsCorner = Instance.new("UICorner")
-    resultsCorner.CornerRadius = UDim.new(0, 8)
-    resultsCorner.Parent = resultsLabel
-    
-    return taskGui, codeInput, testButton, submitButton, resultsLabel, exampleCode
+    return taskGui, codeInput, okButton
 end
 
 -- Validate student code for variables
@@ -689,61 +590,6 @@ local function validateVariableCode(code, requiredVariables)
     return success, table.concat(results, "\n")
 end
 
--- Wait for task completion
-local function waitForTaskCompletion(player, requiredVariables)
-    local playerGui = player:WaitForChild("PlayerGui")
-    local taskGui = playerGui:FindFirstChild("DetectiveTask")
-    
-    if not taskGui then return false end
-    
-    local codeInput = taskGui.TaskFrame.CodeInput
-    local testButton = taskGui.TaskFrame.TestButton
-    local submitButton = taskGui.TaskFrame.SubmitButton
-    local resultsLabel = taskGui.TaskFrame.ResultsLabel
-    
-    local completed = false
-    local validated = false
-    
-    -- Test button functionality
-    local testConnection = testButton.MouseButton1Click:Connect(function()
-        local code = codeInput.Text
-        local success, feedback = validateVariableCode(code, requiredVariables)
-        
-        if success then
-            resultsLabel.Text = "🎉 EXCELLENT! " .. feedback
-            resultsLabel.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
-            validated = true
-        else
-            resultsLabel.Text = "🔧 NEEDS WORK: " .. feedback
-            resultsLabel.BackgroundColor3 = Color3.fromRGB(150, 150, 0)
-            validated = false
-        end
-    end)
-    
-    -- Submit button functionality
-    local submitConnection = submitButton.MouseButton1Click:Connect(function()
-        if validated then
-            completed = true
-            resultsLabel.Text = "✅ TASK COMPLETED! Great detective work!"
-            resultsLabel.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-        else
-            resultsLabel.Text = "⚠️ Please test your code first and fix any issues!"
-            resultsLabel.BackgroundColor3 = Color3.fromRGB(200, 100, 0)
-        end
-    end)
-    
-    -- Wait for completion
-    while not completed do
-        wait(0.5)
-    end
-    
-    -- Cleanup
-    testConnection:Disconnect()
-    submitConnection:Disconnect()
-    taskGui:Destroy()
-    
-    return true
-end
 
 -- =============================================
 -- LESSON 1: INTERACTIVE VARIABLES TASK
@@ -780,11 +626,6 @@ local function basicVariablesLesson()
                 player, taskTitle, instructions, exampleCode, requiredVars
             )
             
-            -- Set the example code text
-            exampleCodeLabel.Text = exampleCode
-            
-            -- Wait for completion
-            waitForTaskCompletion(player, requiredVars)
         end)
     end
     

@@ -461,44 +461,347 @@ local function startDay1Story()
 end
 
 -- =============================================
--- LESSON 1: BASIC VARIABLES
+-- INTERACTIVE TASK SYSTEM
+-- =============================================
+
+-- Create task completion GUI
+local function createTaskGUI(player, taskTitle, instructions, exampleCode, targetVariables)
+    local playerGui = player:WaitForChild("PlayerGui")
+    
+    -- Task GUI
+    local taskGui = Instance.new("ScreenGui")
+    taskGui.Name = "DetectiveTask"
+    taskGui.ResetOnSpawn = false
+    taskGui.Parent = playerGui
+    
+    -- Main task frame
+    local taskFrame = Instance.new("Frame")
+    taskFrame.Name = "TaskFrame"
+    taskFrame.Size = UDim2.new(0.8, 0, 0.8, 0)
+    taskFrame.Position = UDim2.new(0.1, 0, 0.1, 0)
+    taskFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    taskFrame.BorderSizePixel = 0
+    taskFrame.Parent = taskGui
+    
+    local taskCorner = Instance.new("UICorner")
+    taskCorner.CornerRadius = UDim.new(0, 15)
+    taskCorner.Parent = taskFrame
+    
+    -- Task title
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Size = UDim2.new(1, 0, 0.1, 0)
+    titleLabel.Position = UDim2.new(0, 0, 0, 0)
+    titleLabel.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+    titleLabel.BorderSizePixel = 0
+    titleLabel.Text = "🎯 " .. taskTitle
+    titleLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+    titleLabel.TextScaled = true
+    titleLabel.Font = Enum.Font.SourceSansBold
+    titleLabel.Parent = taskFrame
+    
+    local titleCorner = Instance.new("UICorner")
+    titleCorner.CornerRadius = UDim.new(0, 15)
+    titleCorner.Parent = titleLabel
+    
+    -- Instructions
+    local instructionsLabel = Instance.new("TextLabel")
+    instructionsLabel.Size = UDim2.new(0.95, 0, 0.15, 0)
+    instructionsLabel.Position = UDim2.new(0.025, 0, 0.12, 0)
+    instructionsLabel.BackgroundTransparency = 1
+    instructionsLabel.Text = instructions
+    instructionsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    instructionsLabel.TextScaled = true
+    instructionsLabel.Font = Enum.Font.SourceSans
+    instructionsLabel.TextWrapped = true
+    instructionsLabel.TextXAlignment = Enum.TextXAlignment.Left
+    instructionsLabel.Parent = taskFrame
+    
+    -- Example code section
+    local exampleFrame = Instance.new("Frame")
+    exampleFrame.Size = UDim2.new(0.45, 0, 0.5, 0)
+    exampleFrame.Position = UDim2.new(0.025, 0, 0.28, 0)
+    exampleFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    exampleFrame.BorderSizePixel = 0
+    exampleFrame.Parent = taskFrame
+    
+    local exampleCorner = Instance.new("UICorner")
+    exampleCorner.CornerRadius = UDim.new(0, 10)
+    exampleCorner.Parent = exampleFrame
+    
+    local exampleTitle = Instance.new("TextLabel")
+    exampleTitle.Size = UDim2.new(1, 0, 0.1, 0)
+    exampleTitle.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
+    exampleTitle.BorderSizePixel = 0
+    exampleTitle.Text = "📖 EXAMPLE CODE"
+    exampleTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    exampleTitle.TextScaled = true
+    exampleTitle.Font = Enum.Font.SourceSansBold
+    exampleTitle.Parent = exampleFrame
+    
+    local exampleTitleCorner = Instance.new("UICorner")
+    exampleTitleCorner.CornerRadius = UDim.new(0, 10)
+    exampleTitleCorner.Parent = exampleTitle
+    
+    local exampleCode = Instance.new("TextLabel")
+    exampleCode.Size = UDim2.new(0.95, 0, 0.85, 0)
+    exampleCode.Position = UDim2.new(0.025, 0, 0.12, 0)
+    exampleCode.BackgroundTransparency = 1
+    exampleCode.Text = exampleCode
+
+    exampleCode.TextColor3 = Color3.fromRGB(0, 255, 0)
+    exampleCode.TextScaled = true
+    exampleCode.Font = Enum.Font.Code
+    exampleCode.TextWrapped = true
+    exampleCode.TextXAlignment = Enum.TextXAlignment.Left
+    exampleCode.TextYAlignment = Enum.TextYAlignment.Top
+    exampleCode.Parent = exampleFrame
+    
+    -- Student work area
+    local workFrame = Instance.new("Frame")
+    workFrame.Size = UDim2.new(0.45, 0, 0.5, 0)
+    workFrame.Position = UDim2.new(0.525, 0, 0.28, 0)
+    workFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    workFrame.BorderSizePixel = 0
+    workFrame.Parent = taskFrame
+    
+    local workCorner = Instance.new("UICorner")
+    workCorner.CornerRadius = UDim.new(0, 10)
+    workCorner.Parent = workFrame
+    
+    local workTitle = Instance.new("TextLabel")
+    workTitle.Size = UDim2.new(1, 0, 0.1, 0)
+    workTitle.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+    workTitle.BorderSizePixel = 0
+    workTitle.Text = "✏️ YOUR CODE"
+    workTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    workTitle.TextScaled = true
+    workTitle.Font = Enum.Font.SourceSansBold
+    workTitle.Parent = workFrame
+    
+    local workTitleCorner = Instance.new("UICorner")
+    workTitleCorner.CornerRadius = UDim.new(0, 10)
+    workTitleCorner.Parent = workTitle
+    
+    local codeInput = Instance.new("TextBox")
+    codeInput.Name = "CodeInput"
+    codeInput.Size = UDim2.new(0.95, 0, 0.85, 0)
+    codeInput.Position = UDim2.new(0.025, 0, 0.12, 0)
+    codeInput.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    codeInput.BorderSizePixel = 0
+    codeInput.Text = "-- Type your variable code here!\n-- Example: local myName = \"Detective Smith\""
+    codeInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+    codeInput.TextScaled = false
+    codeInput.TextSize = 14
+    codeInput.Font = Enum.Font.Code
+    codeInput.TextWrapped = true
+    codeInput.TextXAlignment = Enum.TextXAlignment.Left
+    codeInput.TextYAlignment = Enum.TextYAlignment.Top
+    codeInput.MultiLine = true
+    codeInput.ClearTextOnFocus = false
+    codeInput.Parent = workFrame
+    
+    local inputCorner = Instance.new("UICorner")
+    inputCorner.CornerRadius = UDim.new(0, 8)
+    inputCorner.Parent = codeInput
+    
+    -- Buttons
+    local buttonFrame = Instance.new("Frame")
+    buttonFrame.Size = UDim2.new(1, 0, 0.12, 0)
+    buttonFrame.Position = UDim2.new(0, 0, 0.85, 0)
+    buttonFrame.BackgroundTransparency = 1
+    buttonFrame.Parent = taskFrame
+    
+    local testButton = Instance.new("TextButton")
+    testButton.Name = "TestButton"
+    testButton.Size = UDim2.new(0.2, 0, 0.8, 0)
+    testButton.Position = UDim2.new(0.3, 0, 0.1, 0)
+    testButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    testButton.BorderSizePixel = 0
+    testButton.Text = "🧪 TEST CODE"
+    testButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+    testButton.TextScaled = true
+    testButton.Font = Enum.Font.SourceSansBold
+    testButton.Parent = buttonFrame
+    
+    local testCorner = Instance.new("UICorner")
+    testCorner.CornerRadius = UDim.new(0, 8)
+    testCorner.Parent = testButton
+    
+    local submitButton = Instance.new("TextButton")
+    submitButton.Name = "SubmitButton"
+    submitButton.Size = UDim2.new(0.2, 0, 0.8, 0)
+    submitButton.Position = UDim2.new(0.55, 0, 0.1, 0)
+    submitButton.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+    submitButton.BorderSizePixel = 0
+    submitButton.Text = "✅ SUBMIT"
+    submitButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+    submitButton.TextScaled = true
+    submitButton.Font = Enum.Font.SourceSansBold
+    submitButton.Parent = buttonFrame
+    
+    local submitCorner = Instance.new("UICorner")
+    submitCorner.CornerRadius = UDim.new(0, 8)
+    submitCorner.Parent = submitButton
+    
+    -- Results area
+    local resultsLabel = Instance.new("TextLabel")
+    resultsLabel.Name = "ResultsLabel"
+    resultsLabel.Size = UDim2.new(0.95, 0, 0.08, 0)
+    resultsLabel.Position = UDim2.new(0.025, 0, 0.79, 0)
+    resultsLabel.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    resultsLabel.BorderSizePixel = 0
+    resultsLabel.Text = "💡 Write your variables and click TEST CODE to see if they work!"
+    resultsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    resultsLabel.TextScaled = true
+    resultsLabel.Font = Enum.Font.SourceSans
+    resultsLabel.TextWrapped = true
+    resultsLabel.Parent = taskFrame
+    
+    local resultsCorner = Instance.new("UICorner")
+    resultsCorner.CornerRadius = UDim.new(0, 8)
+    resultsCorner.Parent = resultsLabel
+    
+    return taskGui, codeInput, testButton, submitButton, resultsLabel, exampleCode
+end
+
+-- Validate student code for variables
+local function validateVariableCode(code, requiredVariables)
+    local results = {}
+    local success = true
+    
+    -- Check for each required variable
+    for _, varName in pairs(requiredVariables) do
+        if string.find(code, "local " .. varName) or string.find(code, varName .. " =") then
+            table.insert(results, "✅ Found variable: " .. varName)
+        else
+            table.insert(results, "❌ Missing variable: " .. varName)
+            success = false
+        end
+    end
+    
+    -- Check for basic syntax
+    if string.find(code, "local") then
+        table.insert(results, "✅ Using 'local' keyword correctly")
+    else
+        table.insert(results, "💡 Tip: Use 'local' before variable names")
+    end
+    
+    return success, table.concat(results, "\n")
+end
+
+-- Wait for task completion
+local function waitForTaskCompletion(player, requiredVariables)
+    local playerGui = player:WaitForChild("PlayerGui")
+    local taskGui = playerGui:FindFirstChild("DetectiveTask")
+    
+    if not taskGui then return false end
+    
+    local codeInput = taskGui.TaskFrame.CodeInput
+    local testButton = taskGui.TaskFrame.TestButton
+    local submitButton = taskGui.TaskFrame.SubmitButton
+    local resultsLabel = taskGui.TaskFrame.ResultsLabel
+    
+    local completed = false
+    local validated = false
+    
+    -- Test button functionality
+    local testConnection = testButton.MouseButton1Click:Connect(function()
+        local code = codeInput.Text
+        local success, feedback = validateVariableCode(code, requiredVariables)
+        
+        if success then
+            resultsLabel.Text = "🎉 EXCELLENT! " .. feedback
+            resultsLabel.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+            validated = true
+        else
+            resultsLabel.Text = "🔧 NEEDS WORK: " .. feedback
+            resultsLabel.BackgroundColor3 = Color3.fromRGB(150, 150, 0)
+            validated = false
+        end
+    end)
+    
+    -- Submit button functionality
+    local submitConnection = submitButton.MouseButton1Click:Connect(function()
+        if validated then
+            completed = true
+            resultsLabel.Text = "✅ TASK COMPLETED! Great detective work!"
+            resultsLabel.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+        else
+            resultsLabel.Text = "⚠️ Please test your code first and fix any issues!"
+            resultsLabel.BackgroundColor3 = Color3.fromRGB(200, 100, 0)
+        end
+    end)
+    
+    -- Wait for completion
+    while not completed do
+        wait(0.5)
+    end
+    
+    -- Cleanup
+    testConnection:Disconnect()
+    submitConnection:Disconnect()
+    taskGui:Destroy()
+    
+    return true
+end
+
+-- =============================================
+-- LESSON 1: INTERACTIVE VARIABLES TASK
 -- =============================================
 
 local function basicVariablesLesson()
-    print("\n📝 LESSON 1: CREATING YOUR DETECTIVE PROFILE")
-    print("=" .. string.rep("-", 35))
-    print()
-    print("Detective Martinez: 'Let's start by creating your detective profile.")
-    print("We'll use variables to store information about you!'")
-    print()
+    -- Show instruction dialog
+    showDialog(
+        "Detective Martinez",
+        "Now let's create your detective profile using variables. I'll show you an example, then you'll create your own!\n\nVariables are like labeled containers that store information.",
+        false,
+        ""
+    )
+    waitForOKClick()
     
-    -- Demonstrate variable creation
-    print("🔍 CREATING VARIABLES:")
-    print("Variables are like name tags for information!")
-    print()
+    -- Show example dialog
+    showDialog(
+        "Officer Binary",
+        "Beep boop! Here's how variables work:\n\nlocal detectiveName = \"Agent Smith\"\nlocal badgeNumber = 1001\nlocal isActive = true\n\nEach variable has a NAME and a VALUE!",
+        false,
+        ""
+    )
+    waitForOKClick()
     
-    -- Student detective profile variables
-    local detectiveName = "Junior Detective Smith"
-    local badgeNumber = 1001
-    local specialization = "Code Analysis"
-    local yearsExperience = 0
-    local isActive = true
+    -- Launch interactive task for all players
+    for _, player in pairs(Players:GetPlayers()) do
+        spawn(function()
+            local taskTitle = "Create Your Detective Profile"
+            local instructions = "Create variables for your detective character. Include: detectiveName (text), badgeNumber (number), specialization (text), and isActive (true/false)."
+            local exampleCode = "-- Example variables:\nlocal detectiveName = \"Agent Smith\"\nlocal badgeNumber = 1001\nlocal specialization = \"Code Analysis\"\nlocal isActive = true\n\n-- Your turn! Create similar variables with your own values."
+            local requiredVars = {"detectiveName", "badgeNumber", "specialization", "isActive"}
+            
+            local taskGui, codeInput, testButton, submitButton, resultsLabel, exampleCodeLabel = createTaskGUI(
+                player, taskTitle, instructions, exampleCode, requiredVars
+            )
+            
+            -- Set the example code text
+            exampleCodeLabel.Text = exampleCode
+            
+            -- Wait for completion
+            waitForTaskCompletion(player, requiredVars)
+        end)
+    end
     
-    print("✅ Your Detective Profile:")
-    print("Name: " .. detectiveName)
-    print("Badge Number: " .. badgeNumber)
-    print("Specialization: " .. specialization)
-    print("Years Experience: " .. yearsExperience)
-    print("Active Status: " .. tostring(isActive))
-    print()
+    -- Wait for all players to complete (simplified - waits for first completion)
+    wait(1)
+    while Players:GetPlayers()[1] and Players:GetPlayers()[1].PlayerGui:FindFirstChild("DetectiveTask") do
+        wait(1)
+    end
     
-    print("Officer Binary: 'Notice how each variable has:")
-    print("• A NAME (like detectiveName)")
-    print("• A VALUE (like \"Junior Detective Smith\")")
-    print("• A TYPE (text, number, or true/false)'")
-    print()
-    
-    wait(2)
+    -- Success dialog
+    showDialog(
+        "Detective Martinez",
+        "Excellent work! You've successfully created variables to store your detective information.\n\nNow you understand that variables are labeled containers for different types of data!",
+        false,
+        ""
+    )
+    waitForOKClick()
 end
 
 -- =============================================
